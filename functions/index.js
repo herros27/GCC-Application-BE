@@ -1,9 +1,11 @@
-const { exec } = require("child_process");
+// const { exec } = require("child_process");
 // const ngrok = require("@ngrok/ngrok");
 const express = require("express");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
-const serviceAccount = require("./gcc-application-firebase-adminsdk-ioogf-0320d2e5a4.json");
+const serviceAccount = require(
+  "../gcc-application-firebase-adminsdk-ioogf-0320d2e5a4.json"
+);
 
 // Inisialisasi Firebase Admin SDK
 admin.initializeApp({
@@ -14,6 +16,13 @@ const db = admin.firestore();
 const app = express();
 app.use(bodyParser.json());
 
+/**
+ * Send a push notification to the given tokens.
+ * @param {Array} tokens - List of device tokens to send the notification to.
+ * @param {string} title - Title of the notification.
+ * @param {string} body - Body text of the notification.
+ * @returns {Promise} - Response from sending the notification.
+ */
 async function sendMessage(tokens, title, body) {
   const message = {
     notification: {
@@ -37,6 +46,11 @@ async function sendMessage(tokens, title, body) {
   }
 }
 
+/**
+ * Get the admin tokens based on address.
+ * @param {string} address - The address to filter admin users.
+ * @returns {Promise<Array>} - List of FCM tokens for admins.
+ */
 async function getAdminTokens(address) {
   try {
     // Ambil semua pengguna yang memiliki role "admin" dari koleksi users
@@ -46,7 +60,7 @@ async function getAdminTokens(address) {
       .where("address", "==", address)
       .get();
     if (usersSnapshot.empty) {
-      console.error('No users found with the role "admin"');
+      console.error("No users found with the role \"admin\"");
       return [];
     }
 
@@ -80,7 +94,11 @@ async function getAdminTokens(address) {
   }
 }
 
-// Fungsi untuk mengirim notifikasi ketika ada upload sampah
+/**
+ * Function to send notification when trash is uploaded.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const sendNotificationUploadTrash = async (req, res) => {
   const { address, title, body } = req.body;
   try {
@@ -106,22 +124,3 @@ const { onRequest } = require("firebase-functions/v2/https");
 exports.sendNotificationUploadTrash = onRequest((req, res) => {
   sendNotificationUploadTrash(req, res);
 });
-
-// // Fungsi ngrok tetap dijalankan di sini
-// exports.startNgrok = onRequest((req, res) => {
-//   const { exec } = require("child_process");
-//   const command = `ngrok start --all`;
-
-//   exec(command, (error, stdout, stderr) => {
-//     if (error) {
-//       console.error(`Error executing ngrok: ${error.message}`);
-//       return res.status(500).send("Error executing ngrok");
-//     }
-//     if (stderr) {
-//       console.error(`ngrok stderr: ${stderr}`);
-//       return res.status(500).send("ngrok error");
-//     }
-//     console.log(`ngrok stdout: ${stdout}`);
-//     res.send("Ngrok started successfully");
-//   });
-// });
