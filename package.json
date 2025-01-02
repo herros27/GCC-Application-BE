@@ -1,0 +1,22 @@
+{
+  "name": "gcc-application-be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google-cloud/firestore": "^7.10.0",
+    "@grpc/proto-loader": "^0.7.13",
+    "@ngrok/ngrok": "^1.4.1",
+    "axios": "^1.7.5",
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "firebase-admin": "^13.0.2",
+    "gcc-application-be": "file:"
+  }
+}
