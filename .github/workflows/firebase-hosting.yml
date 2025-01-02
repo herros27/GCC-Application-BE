@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "14" # Tentukan versi Node.js yang sesuai
+          node-version: "18" # Ubah versi Node.js ke 18 atau lebih tinggi
 
       - name: Install dependencies
         run: npm install
