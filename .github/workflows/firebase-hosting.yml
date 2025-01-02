@@ -1,0 +1,33 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main # Anda bisa mengganti dengan branch yang sesuai (misalnya `master`)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14" # Tentukan versi Node.js yang sesuai
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Firebase CLI setup
+        run: npm install -g firebase-tools
+
+      - name: Authenticate with Firebase
+        run: echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GCC_APPLICATION }} > ${HOME}/firebase-service-account.json
+        env:
+          FIREBASE_SERVICE_ACCOUNT_GCC_APPLICATION: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GCC_APPLICATION }}
+
+      - name: Deploy to Firebase Hosting
+        run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_AUTH_TOKEN }}
