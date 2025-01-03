@@ -34,7 +34,7 @@ async function sendMessage(tokens, title, body) {
   }
 }
 
-app.post("/sendNotificationUploadTrash", async (req, res) => {
+app.post("/api/sendNotificationUploadTrash", async (req, res) => {
   const { address, title, body } = req.body;
 
   try {
