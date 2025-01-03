@@ -6,3 +6,4 @@ gcc-application-firebase-adminsdk-ioogf-0320d2e5a4.json
 
 # Firebase google-services.json for Android apps
 google-services.json
+.vercel
