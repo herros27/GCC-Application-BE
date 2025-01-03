@@ -1,19 +1,21 @@
 const express = require("express");
 const app = express();
-// Gunakan express.json() untuk menggantikan body-parser
 const admin = require("firebase-admin");
-
-// Ambil kredensial Firebase dari variabel lingkungan
-const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
-console.log('Firebase Credentials:', process.env.FIREBASE_CREDENTIALS);
-
-// Inisialisasi Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 // Gunakan middleware express untuk meng-parse JSON request
 app.use(express.json());
+
+// Inisialisasi Firebase dengan error handling
+try {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+  console.log('Firebase Credentials loaded successfully');
+  
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+} catch (error) {
+  console.error('Error initializing Firebase:', error);
+}
 
 async function sendMessage(tokens, title, body) {
   const message = {

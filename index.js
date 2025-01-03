@@ -38,7 +38,7 @@ async function sendMessage(tokens, title, body) {
   }
 }
 
-app.post("/sendNotificationUploadTrash", async (req, res) => {
+app.post("/api/sendNotificationUploadTrash", async (req, res) => {
   const { address, title, body } = req.body;
   try {
     const tokens = await getAdminTokens(address);
@@ -108,23 +108,7 @@ const EXPRESS_PORT = 3000;
 const server = app.listen(EXPRESS_PORT, () => {
   console.log(`Express server running on port ${EXPRESS_PORT}`);
 
-  // Gunakan path lengkap ke ngrok.exe
-  // const ngrokPath = '"D:\APK-GCC\ngrok.exe"';
 
-  const command = `ngrok start --all`;
-
-  // Jalankan ngrok dengan file konfigurasi
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing ngrok: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`ngrok stderr: ${stderr}`);
-      return;
-    }
-    console.log(`ngrok stdout: ${stdout}`);
-  });
 });
 
 // Create separate HTTP server for static content or other purposes
@@ -136,3 +120,22 @@ http
   .listen(HTTP_PORT, () =>
     console.log(`Node.js web server at ${HTTP_PORT} is running...`)
   );
+
+
+    // // Gunakan path lengkap ke ngrok.exe
+  // // const ngrokPath = '"D:\APK-GCC\ngrok.exe"';
+
+  // const command = `ngrok start --all`;
+
+  // // Jalankan ngrok dengan file konfigurasi
+  // exec(command, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`Error executing ngrok: ${error.message}`);
+  //     return;
+  //   }
+  //   if (stderr) {
+  //     console.error(`ngrok stderr: ${stderr}`);
+  //     return;
+  //   }
+  //   console.log(`ngrok stdout: ${stdout}`);
+  // });
