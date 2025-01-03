@@ -1,21 +1,25 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
+// Gunakan express.json() untuk menggantikan body-parser
 const admin = require("firebase-admin");
-const serviceAccount = require("../gcc-application-firebase-adminsdk-ioogf-0320d2e5a4.json");
+
+// Ambil kredensial Firebase dari variabel lingkungan
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 // Inisialisasi Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-app.use(bodyParser.json());
+// Gunakan middleware express untuk meng-parse JSON request
+app.use(express.json());
 
 async function sendMessage(tokens, title, body) {
   const message = {
     notification: { title, body },
     tokens,
   };
+
   try {
     const response = await admin.messaging().sendEachForMulticast({
       notification: message.notification,
@@ -31,6 +35,7 @@ async function sendMessage(tokens, title, body) {
 
 app.post("/sendNotificationUploadTrash", async (req, res) => {
   const { address, title, body } = req.body;
+
   try {
     const tokens = await getAdminTokens(address);
     if (tokens.length === 0) {
@@ -51,19 +56,23 @@ async function getAdminTokens(address) {
     .where("role", "==", "admin")
     .where("address", "==", address)
     .get();
+
   if (snapshot.empty) {
     return [];
   }
+
   const tokens = [];
   for (const doc of snapshot.docs) {
     const tokenDoc = await db
       .collection("tokenNotification")
       .doc(doc.id)
       .get();
+
     if (tokenDoc.exists) {
       tokens.push(...(tokenDoc.data().tokensFcm || []));
     }
   }
+
   return tokens;
 }
 
