@@ -5,6 +5,7 @@ const admin = require("firebase-admin");
 
 // Ambil kredensial Firebase dari variabel lingkungan
 const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+console.log('Firebase Credentials:', process.env.FIREBASE_CREDENTIALS);
 
 // Inisialisasi Firebase Admin SDK
 admin.initializeApp({
